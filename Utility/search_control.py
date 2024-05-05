@@ -12,7 +12,7 @@ def search_control(query, driver):
 
 def search_in_youtube(driver,query):
     open_control("youtube", driver)
-    time.sleep(2)  # Wait for the page to load
+    time.sleep(5)  # Wait for the page to load
     search_box = driver.find_element("name", "search_query")
     search_box.clear()
     search_box.send_keys(query)

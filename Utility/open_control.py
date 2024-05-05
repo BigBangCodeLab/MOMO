@@ -23,4 +23,4 @@ def open_control(query, driver):
                 if existing_tabs:
                     driver.switch_to.window(existing_tabs[0])
                     driver.execute_script(f"window.open('{site_url}', '_blank');")
-                    time.sleep(5)
+                    time.sleep(3)
