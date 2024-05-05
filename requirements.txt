@@ -1,0 +1,5 @@
+pygame
+selenium
+webdriver_manager
+colorama
+edge-tts
