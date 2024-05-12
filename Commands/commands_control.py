@@ -1,6 +1,8 @@
 import datetime
 import re
 
+from Listen.ListenJs import Listen
+from Speak.SpeakOffline import Speak
 from Utility.close_control import close_control
 from Utility.common import get_ip, get_speedtest, get_weather, system_stats, systemInfo
 from Utility.open_control import open_control
@@ -9,6 +11,7 @@ from Utility.search_control import search_control
 from selenium import webdriver
 
 from Utility.system_utility import SystemTasks, TabOpt, WindowOpt
+from project_management import get_project_path, open_folder_dialog, open_vscode, save_project_path
 
 driver = None
 
@@ -42,12 +45,35 @@ def commandControl(query):
     elif "info" in query or "specs" in query or "information" in query:
         return systemInfo()
 
-    
-    elif query.startswith("open"):
+    elif query.startswith("open") and not query.endswith("project"):
         if driver is None:
             driver = webdriver.Chrome()
         driver.get('https://www.google.com')
         open_control(query, driver)
+    
+    elif query.endswith("project"):
+        if 'register' in query:
+            project_path = open_folder_dialog()
+            Speak(f"Got the project path now tell me the project short name for that project")
+            bnText = Listen()
+            project_name = bnText.lower()
+            save_project_path(project_name, project_path)
+            return f"Registered {project_name}"
+
+        open_index = query.find("open")
+        project_index = query.find("project")
+
+        # Extract the project name between "open" and "project"
+        if open_index != -1 and project_index != -1:
+            project_name = query[open_index+len("open"):project_index].strip()
+            print(project_name)
+            project_path = get_project_path(project_name.lower())
+            print(project_path)
+            if project_path is None:
+                return f"Couldn't find the project {project_name}"
+            else:
+                open_vscode(project_path)
+                return f"Opened {project_name}" 
 
     elif query.startswith("search"):
         if driver is None:
@@ -57,6 +83,9 @@ def commandControl(query):
         
     elif query.startswith("close"):
         close_control(query, driver)
+        
+    elif query.startswith("scroll"):
+        scroll_up_down_web(driver, query)
         
     elif query.startswith("scroll"):
         scroll_up_down_web(driver, query)

@@ -10,3 +10,4 @@ psutil
 pynput
 ImageGrab
 Pillow
+tkinter
