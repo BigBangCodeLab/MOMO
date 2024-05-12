@@ -3,3 +3,10 @@ selenium
 webdriver_manager
 colorama
 edge-tts
+speedtest
+requests
+wmi
+psutil
+pynput
+ImageGrab
+Pillow
